@@ -1,6 +1,7 @@
 package pl.sda;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Reminder {
 
@@ -44,28 +45,62 @@ public class Reminder {
         System.out.println("Input streamConvert: " + Arrays.toString(ALBUMS.toArray()));
 
         List<Album> favs = new ArrayList<>();
-        for (Album a : ALBUMS) {
-            boolean hasFavorite = false;
-            for (Track t : a.tracks) {
-                if (t.rating >= 4) {
-                    hasFavorite = true;
-                    break;
-                }
-            }
-            if (hasFavorite)
-                favs.add(a);
-        }
 
-        Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
+        favs = ALBUMS
+                .stream()
+                .filter(s -> (s.tracks
+                        .stream()
+                        .anyMatch(b -> b.rating >= 4)))
+                .sorted((a1, a2) -> a1.name.compareTo(a2.name))
+                .collect(Collectors.toList());
+
+
+//        for (Album a : ALBUMS) {
+//            boolean hasFavorite = false;
+//            for (Track t : a.tracks) {
+//                if (t.rating >= 4) {
+//                    hasFavorite = true;
+//                    break;
+//                }
+//            }
+//            if (hasFavorite)
+//                favs.add(a);
+//        }
+
+//        Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
 
         System.out.println("Result streamConvert: " + Arrays.toString(favs.toArray()));
     }
 
     private static void sortedSetConvert() {
         List<String> args = Arrays.asList("x", "xxx", "xx", "x");
-        Set<String> s = new HashSet<>();
+        Set<String> s = new TreeSet<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Reminder.compare(o1,o2);
+            }
+        });
+
+//        s = args.stream()
+//                .sorted((o1, o2) -> compare(o1, o2))
+//                .collect(Collectors.toCollection(LinkedHashSet::new));
+
         s.addAll(args);
+
         System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
     }
 
+    public static int compare(String a, String b) {
+
+        if (a.length() > b.length()) {
+            return -1;
+        }
+        if (a.length() < b.length()) {
+            return 1;
+        } else
+            return 0;
+    }
 }
+
+
+
