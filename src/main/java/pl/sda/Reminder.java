@@ -37,8 +37,8 @@ public class Reminder {
 
 
     public static void main(String[] args) {
-        streamConvert();
-        //  sortedSetConvert();
+        //streamConvert();
+        sortedSetConvert();
     }
 
     private static void streamConvert() {
@@ -69,8 +69,18 @@ public class Reminder {
 
     private static void sortedSetConvert() {
         List<String> args = Arrays.asList("x", "xxx", "xx", "x");
-        Set<String> s = new HashSet<>();
+        Set<String> s = new TreeSet<>(((o1, o2) -> {
+            if (o1.length() > o2.length()) {
+                return -1;
+            } else if (o1.length() == o2.length()) {
+                return 0;
+            } else return 1;
+        }
+        ));
+//        Set<String> s = new HashSet<>();
         s.addAll(args);
+
+
         System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
     }
 
