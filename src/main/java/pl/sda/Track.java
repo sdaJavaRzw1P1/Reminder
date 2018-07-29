@@ -9,10 +9,6 @@ public class Track {
         this.rating = rating;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
     @Override
     public String toString() {
         return "Track" +
