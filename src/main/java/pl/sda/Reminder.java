@@ -39,6 +39,14 @@ public class Reminder {
     public static void main(String[] args) {
         streamConvert();
         sortedSetConvert();
+
+        List<String> list = new ArrayList<>();
+        list.add("      kilka");
+        list.add("wyrazow ");
+        list.add("do    ");
+        list.add("testu");
+
+        System.out.println(convertAndAdd(list));
     }
 
     private static void streamConvert() {
@@ -63,4 +71,11 @@ public class Reminder {
         System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
     }
 
+    private static String convertAndAdd (List<String> list){
+        String result = "";
+        for(String element : list){
+            result += element.trim().toUpperCase();
+        }
+        return result;
+    }
 }
