@@ -1,6 +1,8 @@
 package pl.sda;
 
+import javax.jws.soap.SOAPMessageHandlers;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Reminder {
 
@@ -36,25 +38,28 @@ public class Reminder {
 
 
     public static void main(String[] args) {
+
+        List<String> strings = new ArrayList<String>();
         streamConvert();
         sortedSetConvert();
+
+        strings.add("Ala");
+        strings.add("ma");
+        strings.add("kota");
+        strings.add("a");
+        strings.add("kot");
+        strings.add("ma");
+        strings.add("AIDS");
+
+        System.out.println(metodaZadanie3(strings));
     }
 
     private static void streamConvert() {
         System.out.println("Input streamConvert: " + Arrays.toString(ALBUMS.toArray()));
+        List<Album> favs = ALBUMS.stream()
+                .filter(album -> album.tracks.stream().anyMatch(track -> track.rating > 4))
+                .collect(Collectors.toList());
 
-        List<Album> favs = new ArrayList<>();
-        for (Album a : ALBUMS) {
-            boolean hasFavorite = false;
-            for (Track t : a.tracks) {
-                if (t.rating >= 4) {
-                    hasFavorite = true;
-                    break;
-                }
-            }
-            if (hasFavorite)
-                favs.add(a);
-        }
 
         Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
 
@@ -63,9 +68,21 @@ public class Reminder {
 
     private static void sortedSetConvert() {
         List<String> args = Arrays.asList("x", "xxx", "xx", "x");
-        Set<String> s = new HashSet<>();
+        Set<String> s = new TreeSet<>((o1, o2) -> {
+            if (o1.length() > o2.length()){
+                return -1;
+            } else if (o1.length() == o2.length()){
+                return 0;
+            } else return 1;
+        });
         s.addAll(args);
         System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
     }
+
+    private static String metodaZadanie3(List<String> lista){
+        String sklejony = lista.stream().map(s -> s.trim().toUpperCase()).collect(Collectors.joining(" "));
+        return sklejony;
+    }
+
 
 }
