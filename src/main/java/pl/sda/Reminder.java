@@ -1,6 +1,7 @@
 package pl.sda;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Reminder {
 
@@ -44,17 +45,22 @@ public class Reminder {
         System.out.println("Input streamConvert: " + Arrays.toString(ALBUMS.toArray()));
 
         List<Album> favs = new ArrayList<>();
-        for (Album a : ALBUMS) {
-            boolean hasFavorite = false;
-            for (Track t : a.tracks) {
-                if (t.rating >= 4) {
-                    hasFavorite = true;
-                    break;
-                }
-            }
-            if (hasFavorite)
-                favs.add(a);
-        }
+//        for (Album a : ALBUMS) {
+//            boolean hasFavorite = false;
+//            for (Track t : a.tracks) {
+//                if (t.rating >= 4) {
+//                    hasFavorite = true;
+//                    break;
+//                }
+//            }
+//            if (hasFavorite)
+//                favs.add(a);
+//        }
+
+        favs = ALBUMS.stream()
+                .filter(p->p.tracks.stream()
+                        .anyMatch(t -> t.rating >=4))
+                .collect(Collectors.toList());
 
         Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
 
@@ -63,9 +69,17 @@ public class Reminder {
 
     private static void sortedSetConvert() {
         List<String> args = Arrays.asList("x", "xxx", "xx", "x");
-        Set<String> s = new HashSet<>();
-        s.addAll(args);
-        System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
+//        Set<String> s = new HashSet<>();
+//        s.addAll(args);
+        //System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
+        Comparator<String> compare = (s1,s2 )-> s2.compareTo(s1);
+        SortedSet set = new TreeSet(compare);
+        set.addAll(args);
+
+
+        System.out.println("Result sortedSetConverter" +set);
+
     }
+
 
 }
