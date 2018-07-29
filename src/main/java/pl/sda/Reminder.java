@@ -1,6 +1,7 @@
 package pl.sda;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Reminder {
 
@@ -37,24 +38,29 @@ public class Reminder {
 
     public static void main(String[] args) {
         streamConvert();
-        sortedSetConvert();
+        //  sortedSetConvert();
     }
 
     private static void streamConvert() {
         System.out.println("Input streamConvert: " + Arrays.toString(ALBUMS.toArray()));
 
         List<Album> favs = new ArrayList<>();
-        for (Album a : ALBUMS) {
-            boolean hasFavorite = false;
-            for (Track t : a.tracks) {
-                if (t.rating >= 4) {
-                    hasFavorite = true;
-                    break;
-                }
-            }
-            if (hasFavorite)
-                favs.add(a);
-        }
+        favs = ALBUMS.stream()
+                .filter(t -> t.tracks.stream()
+                        .anyMatch(r -> r.rating >= 4))
+                .collect(Collectors.toList());
+
+//        for (Album a : ALBUMS) {
+//            boolean hasFavorite = false;
+//            for (Track t : a.tracks) {
+//                if (t.rating >= 4) {
+//                    hasFavorite = true;
+//                    break;
+//                }
+//            }
+//            if (hasFavorite)
+//                favs.add(a);
+//        }
 
         Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
 
