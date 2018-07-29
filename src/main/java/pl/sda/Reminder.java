@@ -40,6 +40,9 @@ public class Reminder {
         streamConvert();
         sortedSetConvert();
         connect(new ArrayList<>(Arrays.asList("asada", "cos", "tam")));
+        Zadanie4 zad4=new Zadanie4();
+        zad4.zad1();
+        zad4.zad2();
     }
 
     private static void streamConvert() {
