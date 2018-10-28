@@ -1,6 +1,7 @@
 package pl.sda;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Reminder {
 
@@ -36,34 +37,69 @@ public class Reminder {
 
 
     public static void main(String[] args) {
-        streamConvert();
-        sortedSetConvert();
+//        streamConvert();
+//        sortedSetConvert();
+
+        List<String> list = new ArrayList<>();
+//        list.add("Abvf ");
+//        list.add(" bbb ");
+//        list.add("Q");
+//        list.add("jjjj ");
+
+        String result = list.stream()
+                .map(a -> a.trim().toUpperCase())
+                .reduce((a, b) -> a + " " + b)
+                .orElse("empty");
+
+
+        System.out.println(result);
     }
 
     private static void streamConvert() {
         System.out.println("Input streamConvert: " + Arrays.toString(ALBUMS.toArray()));
 
         List<Album> favs = new ArrayList<>();
-        for (Album a : ALBUMS) {
-            boolean hasFavorite = false;
-            for (Track t : a.tracks) {
-                if (t.rating >= 4) {
-                    hasFavorite = true;
-                    break;
-                }
-            }
-            if (hasFavorite)
-                favs.add(a);
-        }
+//        for (Album a : ALBUMS) {
+//            boolean hasFavorite = false;
+//            for (Track t : a.tracks) {
+//                if (t.rating >= 4) {
+//                    hasFavorite = true;
+//                    break;
+//                }
+//            }
+//            if (hasFavorite)
+//                favs.add(a);
+//        }
 
-        Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
+//        Collections.sort(favs, (a1, a2) -> a1.name.compareTo(a2.name));
+
+//        Rozwiązanie 1:
+//        ALBUMS.stream()
+//                .filter(album -> album.tracks.stream()
+//                        .anyMatch(track -> track.rating >= 4))
+//                .sorted((a1, a2) -> a1.name.compareTo(a2.name))
+//                .forEach(album -> favs.add(album));
+
+//        Rozwiązanie 2:
+        favs = ALBUMS.stream()
+                .filter(album -> album.tracks.stream()
+                        .anyMatch(track -> track.rating >= 4))
+                .sorted((a1, a2) -> a1.name.compareTo(a2.name))
+                .collect(Collectors.toList());
 
         System.out.println("Result streamConvert: " + Arrays.toString(favs.toArray()));
     }
 
     private static void sortedSetConvert() {
-        List<String> args = Arrays.asList("x", "xxx", "xx", "x");
-        Set<String> s = new HashSet<>();
+        List<String> args = Arrays.asList("x", "aaa", "xx", "x", "xxx");
+        Set<String> s = new TreeSet<>((o1, o2) -> {
+            if (o1.length() < o2.length()) {
+                return -1;
+            } else if (o1.length() > o2.length()) {
+                return 1;
+            }
+            return 0;
+        });
         s.addAll(args);
         System.out.println("Result sortedSetConvert: " + s.size() + " distinct words: " + s);
     }
